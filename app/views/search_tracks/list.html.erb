@@ -1,2 +1,16 @@
-<h1>SearchTracks#list</h1>
-<p>Find me in app/views/search_tracks/list.html.erb</p>
+<div class="row">
+	<div class="span8"> <img src="<%= @image %>"></div>
+	<div class="span4">
+		<% count=1 %>
+		<% @pois.each do |poi| %>
+		<div class="well">
+			<h1><span class="badge badge-info"><%=count%></span> <%= poi[:label].force_encoding('ASCII-8BIT')%> </h1>
+			<p>
+				<%= poi[:abstract].force_encoding('ASCII-8BIT') %>
+			</p>
+			<img src="<%= poi[:thumb]%>" width="100%">
+		</div>
+		<%count+=1%>
+		<%end %>
+	</div>
+</div>

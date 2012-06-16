@@ -9,8 +9,11 @@ gem 'formtastic', " ~> 2.1.1"
 gem 'less'
 gem 'less-rails-bootstrap'
 gem 'formtastic-bootstrap', :git => 'git://github.com/cgunther/formtastic-bootstrap.git', :branch => 'bootstrap2-rails3-2-formtastic-2-1'
+gem 'sparql-client'
+gem "jruby-openssl", :platforms => :jruby
 
-
+#Maps API
+gem "googlestaticmap"
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
