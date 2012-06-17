@@ -1,7 +1,9 @@
 XmlSummerSessions::Application.routes.draw do
   get "search_tracks/search"
 
-  get "search_tracks/list"
+  match "search_tracks/list"
+  match "search_tracks/show"
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

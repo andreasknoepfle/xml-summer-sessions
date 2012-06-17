@@ -6,10 +6,10 @@
 				Here should be a helpful text message
 			</p>
 		
-			<form class="form-search">
+			<%=form_tag('/search_tracks/list', :class => "form-search")  do %>
 					<input type="text" class="search-query" name="q">
 					<button type="submit" class="btn">Search</button>
-			</form>
+			<%end%>
 		</div>
 	</div>
 	
