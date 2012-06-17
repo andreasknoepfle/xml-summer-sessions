@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="http://84.200.15.101/xml"
+xmlns="http://84.200.15.101/xml">
+
+	<xs:simpleType name="longitudeType">
+		<xs:restriction base="xs:float">
+			<xs:minInclusive value="-180.0"/>
+			<xs:maxInclusive value="180.0"/>
+		</xs:restriction>
+	</xs:simpleType>	
+
+	<xs:simpleType name="latitudeType">
+		<xs:restriction base="xs:float">
+			<xs:minInclusive value="-90.0"/>
+			<xs:maxInclusive value="90.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="Tracks">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Track" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Title" type="xs:string"/>
+							<xs:element name="StartLatitude" type="latitudeType"/>
+							<xs:element name="StartLongitude" type="longitudeType"/>
+							<xs:element name="EndLatitude" type="latitudeType"/>
+							<xs:element name="EndLongitude" type="longitudeType"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
