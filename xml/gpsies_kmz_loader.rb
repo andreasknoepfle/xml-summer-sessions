@@ -5,7 +5,9 @@
 # 3. entpacken der KMZ Datei -> doc.kml
 # 4. extrahieren der coordinaten aus der doc.kml
 # 5. coordinaten in den Track einfuegen
-# 6. Modifizierten Track in neue DB speichern
+# 6. XSL-Transformation
+# 7. mit Schema validieren
+# 8. Modifizierten Track in neue DB speichern
 
 require '../lib/BaseXClient.rb'
 require 'nokogiri'
@@ -15,22 +17,20 @@ require 'zip/zip' #gem install rubyzip
 
 begin
 	session = BaseXClient::Session.new("84.200.15.101", 1984, "admin", "admin")
-	session.execute('open tracks_raw_test')
+	session.execute('open tracks_raw')
 	
 	kml_session = BaseXClient::Session.new("84.200.15.101", 1984, "admin", "admin")
 	kml_session.execute('drop db tracks_kml')	
 	kml_session.execute('create db tracks_kml')
 	
 	# 1. holen aller Tracks
-	# TODO holt nur die Tracks aus dem 1. Dokument,
-	# es werden aber alle benoetigt!
-	query = session.query('//track')
+	query = session.query('//tracks/track')
 
 	while query.more do
 
 		track = Nokogiri::XML(query.next)
 		link = track.at_xpath('//downloadLink').content			
-		#puts link
+	
 		# 2. laden der KMZ Datei
 		`wget #{link} -O tmp/tmp.kmz`
 
