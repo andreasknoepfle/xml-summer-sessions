@@ -8,8 +8,14 @@ class SearchTracksController < ApplicationController
     session = BaseXClient::Session.new("84.200.15.101", 1984, "admin", "admin")
     
     # perform command and print returned string
-    @result =  session.execute("xquery for $t in db:list(\"tracks\") return file:read-text($t)")
-  
+    @result =  session.execute("open tracks_raw")
+      
+    @result =  session.execute("xquery for $track in //tracks/track
+                                where contains($track/title, 'Berlin')
+                                order by $track/title
+                                return $track")
+    #end
+
     # close session
     session.close
     rescue
