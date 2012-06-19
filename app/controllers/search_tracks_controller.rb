@@ -8,29 +8,35 @@ class SearchTracksController < ApplicationController
     session = BaseXClient::Session.new("84.200.15.101", 1984, "admin", "admin")
     
     # perform command and print returned string
-    @result =  session.execute("xquery for $t in db:list(\"tracks\") return file:read-text($t)")
+    session.execute("open tracks")
+    @result =  session.execute(" find track")
   
     # close session
     session.close
-    rescue
+   
   end
   def show
-     @pois = Poi.find(52.514967298868314, 13.464775085449219, 0.01) 
-     map = GoogleStaticMap.new :width => 700, :height => 700,:maptype => "satellite"
+     @coordinates = [{:latitude => 52.514967298868314, :longitude => 13.464775085449219},{:latitude => 52.544967298868314, :longitude => 13.474775085449219},{:latitude => 52.554967298868314, :longitude => 13.484775085449219}]
+     @pois = Poi.find(@coordinates, 0.01) 
+     map = GoogleStaticMap.new :width => 500, :height => 500
+     map_sat = GoogleStaticMap.new :width => 500, :height => 500,:maptype => "satellite" 
      count=1
      @pois_xml = []
      @pois.each do |poi| 
         @pois_xml << poi.to_xml(:root => "poi")
         map.markers << MapMarker.new(:color => "blue", :label => count.to_s ,:location => MapLocation.new(:latitude => poi[:lat], :longitude => poi[:long]))
+        map_sat.markers << MapMarker.new(:color => "blue", :label => count.to_s ,:location => MapLocation.new(:latitude => poi[:lat], :longitude => poi[:long]))
         count+=1
-      end
+    end
      
     poly = MapPolygon.new(:color => "0x00FF00")
-    poly.points << MapLocation.new(:latitude => 52.514967298868314, :longitude => 13.464775085449219)
-    poly.points << MapLocation.new(:latitude => 52.544967298868314, :longitude => 13.474775085449219)
-    poly.points << MapLocation.new(:latitude => 52.554967298868314, :longitude => 13.484775085449219)
+    @coordinates.each do |coordinate|
+      poly.points << MapLocation.new(:latitude => coordinate[:latitude], :longitude => coordinate[:longitude])
+    end
     map.paths << poly
-     @image = map.url(:auto)
+    map_sat.paths << poly
+    @image = map.url(:auto)
+    @image_sat = map_sat.url(:auto)
   end
   
   

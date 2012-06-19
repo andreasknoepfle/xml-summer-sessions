@@ -1,28 +1,31 @@
-<div class="row">
-	<div class="span8"> <img src="<%= @image %>"></div>
-	<div class="span4">
-		<% count=1 %>
-		<% @pois.each do |poi| %>
-			<div class="well">
-				<h1><span class="badge badge-info"><%=count%></span> <%= poi[:label].force_encoding('ASCII-8BIT')%> </h1>
-				<p>
-					<%= poi[:abstract].force_encoding('ASCII-8BIT') %>
-				</p>
-				<img src="<%= poi[:thumb]%>" width="100%">
-			</div>
-			<%count+=1%>
-		<%end %>
-	</div>
-	<div class="span12"> 
-		<% count=1 %>
-		<% @pois_xml.each do |poi| %>
-			<span class="badge badge-info"><%=count%></span>
-			<div class="well">
-			<code>
-				<%= poi.force_encoding('ASCII-8BIT')%>
-			</code>
-			</div>
-			<%count+=1%>
-		<%end %>
-	</div>
+<div class="hero-unit">
+	
+		<img src="<%= @image %>">
+		<img src="<%= @image_sat %>">
+	
 </div>
+
+	
+<% count=1 %>
+<% @pois.each do |poi| %>
+	
+	<div class="row">
+	     <div class="span2">
+	     	<div class="well">
+	         <img src="<%= poi[:thumb]%>" alt="<%= poi[:label].force_encoding('ASCII-8BIT')%>" >
+	         </div>
+	     </div> 
+	     <div class="span10">
+	     	<h5><span class="badge badge-info"><%= count%></span> <%= poi[:label].force_encoding('ASCII-8BIT')%> </h5>
+	              <p><%= poi[:abstract].force_encoding('ASCII-8BIT') %></p>
+	            
+	        
+	    </div>
+	       
+	     	<% count+=1%>
+	</div>
+	
+<%end %>
+		
+		
+	
