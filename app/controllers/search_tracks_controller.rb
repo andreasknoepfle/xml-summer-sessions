@@ -1,4 +1,6 @@
 
+require 'net/http'
+require 'rexml/document'
 
 class SearchTracksController < ApplicationController
   def search
@@ -8,18 +10,31 @@ class SearchTracksController < ApplicationController
     session = BaseXClient::Session.new("84.200.15.101", 1984, "admin", "admin")
     
     # perform command and print returned string
-    @result =  session.execute("open tracks_raw")
+    @result =  session.execute("open tracks_kml")
       
-    @result =  session.execute("xquery for $track in //tracks/track
-                                where contains($track/title, 'Berlin')
-                                order by $track/title
-                                return $track")
+    query = "xquery for $track in //track
+                                where contains($track/title, '" + params[:search_tag] + "') " +
+                                "or contains($track/startPointAddress, '" + params[:search_tag] + "') " +
+                                "or contains($track/endPointAddress, '"+ params[:search_tag] + "') " +
+                                "order by $track/title
+                                return $track"
+
+    @result =  session.execute(query)
+
+
+    #@result =  session.execute("xquery for $track in //track
+    #                            where contains($track/title, 'huhu') or
+    #                            contains($track/startPointAddress, '26486') or
+    #                            contains($track/endPointAddress, '26486')
+    #                            order by $track/title
+    #                            return $track")
     #end
 
     # close session
     session.close
     rescue
   end
+  
   def show
      @pois = Poi.find(52.514967298868314, 13.464775085449219, 0.01) 
      map = GoogleStaticMap.new :width => 700, :height => 700,:maptype => "satellite"
