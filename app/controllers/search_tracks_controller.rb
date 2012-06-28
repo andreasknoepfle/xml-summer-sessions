@@ -38,8 +38,8 @@ class SearchTracksController < ApplicationController
     # 
     session = BaseXClient::Session.new("84.200.15.101", 1984, "admin", "admin")
     session.execute("open tracks_kml")
-    @result = session.execute("xquery for $track in //track where $track/fileId = \"" +params[:q]+"\" return $track")
-   
+    @result = session.execute("xquery db:open(\"tracks_kml\", \""+params[:q]+"\")")
+
     track_tmp = Hash.from_xml @result
     @track=track_tmp["track"]
    
