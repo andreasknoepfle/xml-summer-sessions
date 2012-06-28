@@ -32,18 +32,18 @@ class Poi < Hash
          
          end 
          
-         query += "   }  LIMIT 100"
+         query += "   }  LIMIT 35"
 	       
 	       client = SPARQL::Client.new("http://dbpedia.org/sparql")
          query_res = client.query(query)
         result_list = []
           query_res.each_solution do |solution|
               poi = Poi.new
-              poi[:lat] = solution[:lat].value
-              poi[:long] = solution[:long].value
-              poi[:label] = solution[:label].value
-              poi[:abstract] = solution[:abstract].value
-              poi[:thumb] = solution[:thumb]
+              poi["lat"] = solution[:lat].value
+              poi["long"] = solution[:long].value
+              poi["label"] = solution[:label].value
+              poi["abstract"] = solution[:abstract].value
+              poi["thumb"] = solution[:thumb].to_s
               result_list.push poi
           end
     

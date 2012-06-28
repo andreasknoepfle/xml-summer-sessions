@@ -39,10 +39,10 @@ class SearchTracksController < ApplicationController
     session = BaseXClient::Session.new("84.200.15.101", 1984, "admin", "admin")
     session.execute("open tracks_kml")
     @result = session.execute("xquery for $track in //track where $track/fileId = \"" +params[:q]+"\" return $track")
-    puts 
+   
     track_tmp = Hash.from_xml @result
     @track=track_tmp["track"]
-    
+   
     coordinates_string = @track["coordinates"].split(" ")
     @coordinates = []
     coordinates_string.each do |entry|
@@ -60,18 +60,35 @@ class SearchTracksController < ApplicationController
       end
       count+=1
     end
-    
-    @pois = Poi.find(coordinates_poi, 0.01)
+    if(@track.has_key? "pois")
+      @pois=@track["pois"]
+    else  
+      @pois = Poi.find(coordinates_poi, 0.01)
+     
+      @track["pois"] = @pois
+      track_xml = @track.to_xml :root => "track"
+      session.replace(params[:q],track_xml)
+    end
+   
     map = GoogleStaticMap.new :width => 500, :height => 500
     map_sat = GoogleStaticMap.new :width => 500, :height => 500,:maptype => "satellite"
     
     
-    count=1
-    @pois_xml = []
+    count=0
+    @letters= []
+     (1..9).each do |l|
+      @letters << l.to_s
+    end
+    ('A'..'Z').each do |l|
+      @letters << l
+    end
     @pois.each do |poi|
-      @pois_xml << poi.to_xml(:root => "poi")
-      map.markers << MapMarker.new(:color => "blue", :label => count.to_s ,:location => MapLocation.new(:latitude => poi[:lat], :longitude => poi[:long]))
-      map_sat.markers << MapMarker.new(:color => "blue", :label => count.to_s ,:location => MapLocation.new(:latitude => poi[:lat], :longitude => poi[:long]))
+      tweets=Twitter.search(poi["label"],:rpp => 5)
+      if tweets
+        poi["tweets"]=tweets
+      end
+      map.markers << MapMarker.new(:color => "blue", :label => @letters[count] ,:location => MapLocation.new(:latitude => poi["lat"], :longitude => poi["long"]))
+      map_sat.markers << MapMarker.new(:color => "blue", :label =>  @letters[count] ,:location => MapLocation.new(:latitude => poi["lat"], :longitude => poi["long"]))
       count+=1
     end
 
@@ -83,6 +100,7 @@ class SearchTracksController < ApplicationController
     map_sat.paths << poly
     @image = map.url(:auto)
     @image_sat = map_sat.url(:auto)
+   
   end
 
 end

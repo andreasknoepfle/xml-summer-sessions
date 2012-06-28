@@ -5,21 +5,29 @@
 	
 </div>
 
-	
-<% count=1 %>
+<% count=0%>
 <% @pois.each do |poi| %>
 	
 	<div class="row">
 	     <div class="span2">
 	     	<div class="well">
-	         <img src="<%= poi[:thumb]%>" alt="<%= poi[:label].force_encoding('ASCII-8BIT')%>" >
+	         <img src="<%= poi["thumb"]%>" alt="<%= poi["label"].force_encoding('ASCII-8BIT')%>" >
 	         </div>
 	     </div> 
 	     <div class="span10">
-	     	<h5><span class="badge badge-info"><%= count%></span> <%= poi[:label].force_encoding('ASCII-8BIT')%> </h5>
-	              <p><%= poi[:abstract].force_encoding('ASCII-8BIT') %></p>
-	            
-	        
+	     	<h5><span class="badge badge-info"><%=  @letters[count]%></span> <%= poi["label"].force_encoding('ASCII-8BIT')%> </h5>
+	              <p><%= poi["abstract"].force_encoding('ASCII-8BIT') %></p>
+	              
+	              <%if poi["tweets"]%>
+		              <% poi["tweets"].each do |tweet|%>
+		              		              
+		              	<blockquote class="twitter-tweet"> <p><%=tweet.full_text.force_encoding('ASCII-8BIT')%></p>&mdash;<%=tweet.from_user.force_encoding('ASCII-8BIT')%>(@twitterapi)
+		              		<a href="https://twitter.com/twitterapi/status/<%=tweet.id%>" data-datetime="<%=tweet.created_at%>"><%=tweet.created_at%></a>
+		              	</blockquote>
+		             	
+		              <%end%>
+		            
+	              <%end%>
 	    </div>
 	       
 	     	<% count+=1%>
