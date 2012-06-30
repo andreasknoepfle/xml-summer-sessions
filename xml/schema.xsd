@@ -1,7 +1,32 @@
 <?xml version="1.0"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-targetNamespace="http://84.200.15.101/xml"
-xmlns="http://84.200.15.101/xml">
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<!--
+		Jedes Dokument besteht aus nur einem Track!
+	-->
+
+	<xs:element name="track">
+        <xs:complexType>
+			<xs:sequence>
+				<xs:element name="title" type="xs:string"/>
+				<xs:element name="fileId" type="xs:string"/>
+				<xs:element name="startPointAddress" type="xs:string"/>
+				<xs:element name="endPointAddress" type="xs:string"/>
+				<xs:element name="coordinates" type="xs:string"/>
+				<xs:element name="pois">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="poi" maxOccurs="unbounded" type="poiType" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!--
+		Lat und Long Definition
+	-->
 
 	<xs:simpleType name="longitudeType">
 		<xs:restriction base="xs:float">
@@ -17,21 +42,18 @@ xmlns="http://84.200.15.101/xml">
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:element name="Tracks">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="Track" maxOccurs="unbounded">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="Title" type="xs:string"/>
-							<xs:element name="StartLatitude" type="latitudeType"/>
-							<xs:element name="StartLongitude" type="longitudeType"/>
-							<xs:element name="EndLatitude" type="latitudeType"/>
-							<xs:element name="EndLongitude" type="longitudeType"/>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
+	<!--
+		Definition eines POI
+	-->
+	
+	<xs:complexType name="poiType">
+		<xs:sequence>
+			<xs:element name="lat" type="latitudeType"/>
+			<xs:element name="long" type="longitudeType"/>
+			<xs:element name="label" type="xs:string"/>
+			<xs:element name="abstract" type="xs:string"/>
+			<xs:element name="thumb" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+
 </xs:schema>

@@ -1,5 +1,6 @@
 require 'net/http'
 require 'rexml/document'
+require 'nokogiri'
 
 class SearchTracksController < ApplicationController
   def search
@@ -64,10 +65,16 @@ class SearchTracksController < ApplicationController
       @pois=@track["pois"]
     else  
       @pois = Poi.find(coordinates_poi, 0.01)
-     
+
       @track["pois"] = @pois
-      track_xml = @track.to_xml :root => "track"
-      session.replace(params[:q],track_xml)
+      track_xml = @track.to_xml :root => "track", :skip_types => true
+      # track_xml.at_xpath('//track') << @pois.to_xml(:skip_types => true)   
+
+      # Schemavalidierung
+      xsd = Nokogiri::XML::Schema(open('xml/schema.xsd'))
+      if(xsd.valid?(Nokogiri::XML(track_xml)))
+      	session.replace(params[:q],track_xml)
+      end
     end
    
     map = GoogleStaticMap.new :width => 500, :height => 500

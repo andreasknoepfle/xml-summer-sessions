@@ -6,7 +6,7 @@
 # 4. entpacken der KMZ Datei -> doc.kml
 # 5. extrahieren der coordinaten aus der doc.kml
 # 6. XSL-Transformation -> ersetzt durch Erstellung eines neuen XML
-# 7. mit Schema validieren
+# (7. mit Schema validieren)
 # 8. Modifizierten Track in neue DB speichern
 
 require '../lib/BaseXClient.rb'
@@ -89,8 +89,8 @@ begin
 						}
 					end
 
-					# 7. mit Schema validieren
-					# TODO
+					# (7. mit Schema validieren)
+					# wird beim Einfuegen der POIs gemacht
 
 					# 8. Modifizierten Track in neue DB speichern
 					kml_session.add(fileId, builder.to_xml) 
