@@ -1,30 +1,37 @@
+<section itemscope itemtype="http://schema.org/Thing">
 <div class="hero-unit">
-	
-		<img src="<%= @image %>">
+	    <h3 itemprop="name"><%=@track["title"]%><h2>
+		<img itemprop="image" src="<%= @image %>">
 		<img src="<%= @image_sat %>">
 	
 </div>
-
+</section>
 <% count=0%>
 <% @pois.each do |poi| %>
 	
 	<div class="row">
+		<section itemscope itemtype="http://schema.org/Place">
 	     <div class="span2">
 	     	<div class="well">
-	         <img src="<%= poi["thumb"]%>" alt="<%= poi["label"].force_encoding('ASCII-8BIT')%>" >
+	         <img src="<%= poi["thumb"]%>" itemprop="image" alt="<%= poi["label"].force_encoding('ASCII-8BIT')%>" >
 	         </div>
 	     </div> 
 	     <div class="span10">
-	     	<h5><span class="badge badge-info"><%=  @letters[count]%></span> <%= poi["label"].force_encoding('ASCII-8BIT')%> </h5>
-	              <p><%= poi["abstract"].force_encoding('ASCII-8BIT') %></p>
+	     	<span class="badge badge-info"><%=  @letters[count]%></span> <h5 itemprop="name"><%= poi["label"].force_encoding('ASCII-8BIT')%> </span></h5>
+	     	<div itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">
+   
+			    <meta itemprop="latitude" content="<%= poi["lat"] %>" />
+			    <meta itemprop="longitude" content=<%= poi["long"] %> />
+  			</div>
+	              <p itemprop="description"><%= poi["abstract"].force_encoding('ASCII-8BIT') %></p>
 	              
 	              <%if poi["tweets"]%>
 		              <% poi["tweets"].each do |tweet|%>
-		              		              
-		              	<blockquote class="twitter-tweet"> <p><%=tweet.full_text.force_encoding('ASCII-8BIT')%></p>&mdash;<%=tweet.from_user.force_encoding('ASCII-8BIT')%>(@twitterapi)
+		                
+		              	<blockquote class="twitter-tweet"> <p ><%=tweet.full_text.force_encoding('ASCII-8BIT')%></p>&mdash;<%=tweet.from_user.force_encoding('ASCII-8BIT')%>(@twitterapi)
 		              		<a href="https://twitter.com/twitterapi/status/<%=tweet.id%>" data-datetime="<%=tweet.created_at%>"><%=tweet.created_at%></a>
 		              	</blockquote>
-		             	
+		             
 		              <%end%>
 		            
 	              <%end%>
@@ -32,7 +39,7 @@
 	       
 	     	<% count+=1%>
 	</div>
-	
+	</section>
 <%end %>
 		
 		
