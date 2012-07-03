@@ -62,13 +62,12 @@ class SearchTracksController < ApplicationController
       count+=1
     end
     if(@track.has_key? "pois")
-      @pois=@track["pois"]
+      @pois=@track["pois"]["poi"]
     else  
       @pois = Poi.find(coordinates_poi, 0.01)
 
       @track["pois"] = @pois
       track_xml = @track.to_xml :root => "track", :skip_types => true
-      # track_xml.at_xpath('//track') << @pois.to_xml(:skip_types => true)   
 
       # Schemavalidierung
       xsd = Nokogiri::XML::Schema(open('xml/schema.xsd'))
@@ -80,7 +79,6 @@ class SearchTracksController < ApplicationController
     map = GoogleStaticMap.new :width => 500, :height => 500
     map_sat = GoogleStaticMap.new :width => 500, :height => 500,:maptype => "satellite"
     
-    
     count=0
     @letters= []
      (1..9).each do |l|
@@ -89,6 +87,7 @@ class SearchTracksController < ApplicationController
     ('A'..'Z').each do |l|
       @letters << l
     end
+
     @pois.each do |poi|
       tweets=Twitter.search(poi["label"],:rpp => 5)
       if tweets
